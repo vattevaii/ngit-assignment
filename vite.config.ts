@@ -1,30 +1,65 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import dts from "vite-plugin-dts";
-import path, { resolve } from "path";
+import { resolve } from "path";
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react(), dts({ include: ["lib"] })],
-  build: {
-    emptyOutDir: true,
-    rollupOptions: {
-      output: [
-        {
-          format: 'es',
-          entryFileNames: 'index.js', // For ES format
-          assetFileNames: 'index[extname]',
+export default defineConfig(({ mode }) => {
+  if (mode === "lib")
+    return {
+      plugins: [react(), dts({ include: ["lib"] })],
+      build: {
+        outDir: "dist-lib",
+        emptyOutDir: true,
+        rollupOptions: {
+          external: ["react", "react-dom", "react/jsx-runtime"],
+          output: {
+            globals: {
+              react: "react",
+              "react-dom": "ReactDOM",
+              "react/jsx-runtime": "react/jsx-runtime",
+            },
+          },
         },
-        {
-          format: 'umd',
-          name: "index",
-          entryFileNames: 'index.cjs', // For UMD format
-          assetFileNames: 'index[extname]',
-        }
-      ],
+        // rollupOptions: {
+        //   output: [
+        //     {
+        //       format: "es",
+        //       entryFileNames: "index.js", // For ES format
+        //       assetFileNames: "index[extname]",
+        //     },
+        //     {
+        //       format: "umd",
+        //       name: "index",
+        //       entryFileNames: "index.cjs", // For UMD format
+        //       assetFileNames: "index[extname]",
+        //     },
+        //   ],
+        // },
+        lib: {
+          entry: resolve(__dirname, "lib/main.ts"),
+          name: "better-than-swiper",
+          fileName: (format) => {
+            switch (format) {
+              case "es":
+                return `index.js`;
+              case "esm":
+                return `index.js`;
+              case "cjs":
+                return "index.cjs";
+              case "umd":
+                return "index.cjs";
+            }
+            return `index.${format}`;
+          },
+        },
+      },
+    };
+
+  return {
+    plugins: [react()],
+    build: {
+      emptyOutDir: true,
     },
-    lib: {
-      entry: resolve(__dirname, "lib/main.ts"),
-    },
-  },
+  };
 });
