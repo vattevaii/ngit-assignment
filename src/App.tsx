@@ -1,3 +1,4 @@
+import { Some } from "../lib/main";
 import "./App.css";
 import { Card } from "./components/Card";
 import GradientDiv from "./components/common/GradientDiv";
@@ -49,8 +50,16 @@ function Test() {
 
 function App() {
   return (
-    <div className="flex flex-col gap-5 bg-gradient-to-br from-[#fbcb73] via-[#d42b7d] to-[#7341bb] justify-center items-center text-red-950 p-5 bg-slate-400 h-screen">
-      <Card />
+    <div className="flex flex-col gap-5 bg-fixed bg-gradient-to-br from-[#fbcb73] via-[#d42b7d] to-[#7341bb] justify-center items-center text-red-950 p-5 bg-slate-400 min-h-screen">
+      <Some>
+        <Card/>
+        <Card/>
+        <Card/>
+        <Card/>
+        <Card/>
+        <Card/>
+        <Card/>
+      </Some>
     </div>
   );
 }
