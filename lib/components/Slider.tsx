@@ -37,6 +37,7 @@ const Slide = ({
         top: top,
         transform: transform,
         transformOrigin: "0% 50%",
+        opacity: active? "1":"0.5"
       }}
     >
       {child}
