@@ -24,13 +24,13 @@ export function useSwipe() {
     setStartY(e.clientY);
   }, []);
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
+  const handleMouseMove = useCallback((_e: MouseEvent) => {
     if (!checkStart) return;
+  }, []);
+  const handleMouseUp = useCallback((e: MouseEvent) => {
+    setCheckStart(false);
     setEndX(e.clientX);
     setEndY(e.clientY);
-  }, []);
-  const handleMouseUp = useCallback(() => {
-    setCheckStart(false);
   }, []);
 
   useEffect(() => {

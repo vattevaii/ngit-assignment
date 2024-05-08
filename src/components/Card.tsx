@@ -7,7 +7,7 @@ const commonShadow =
 const commonInnerStyles =
   "absolute inset-0 bg-gradient-to-br from-[#f1bbab] to-[#0000] " +
   commonShadow;
-export function Card() {
+export function Card({ id }: { id?: string }) {
   return (
     <div className="p-5 h-full max-h-96 aspect-square rounded-3xl relative bg-gradient-to-br from-accent-solid  to-[#0001]">
       <div className={clsx(commonShadow, "absolute inset-0 rounded-3xl")}></div>
@@ -38,6 +38,7 @@ export function Card() {
             ></div>
           </div>
         </div>
+        <span>{id}</span>
       </div>
     </div>
   );

@@ -151,7 +151,7 @@ function App() {
     gap: 10,
     sliderHeight: 700,
     slidesToShow: 2,
-    activeStyle: 'scale'
+    activeStyle: "scale",
   });
 
   const handleSettingChange = (name: string, value: boolean | number) => {
@@ -181,13 +181,13 @@ function App() {
       </div>
       <div className="flex flex-col gap-5 bg-fixed bg-gradient-to-br from-[#fbcb73] via-[#d42b7d] to-[#7341bb] justify-center items-center text-red-950 p-5 bg-slate-400 min-h-screen">
         <Slider settings={settings}>
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+          <Card id="1" />
+          <Card id="2" />
+          <Card id="3" />
+          <Card id="4" />
+          <Card id="5" />
+          <Card id="6" />
+          <Card id="7" />
         </Slider>
       </div>
     </div>
