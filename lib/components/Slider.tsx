@@ -1,7 +1,39 @@
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { debounce } from "../helpers/debounce";
 
-export default function Some({ children }: { children: ReactNode[] }) {
+const defaultSettings = {
+  autoplay: false,
+  centered: true,
+  sliderHeight: 700,
+  slidesToShow: 2,
+  gap: 10,
+  activeStyle: "none",
+};
+
+export type SliderSettings = Partial<typeof defaultSettings>;
+
+export default function Slider({
+  children,
+  settings = { activeStyle: "scale" },
+}: {
+  children: ReactNode[];
+  settings?: Partial<typeof defaultSettings>;
+}) {
+  const {
+    autoplay,
+    centered,
+    gap: baseGap,
+    sliderHeight,
+    slidesToShow,
+    activeStyle,
+  } = {
+    autoplay: settings.autoplay ?? defaultSettings.autoplay,
+    centered: settings.centered ?? defaultSettings.centered,
+    gap: settings.gap ?? defaultSettings.gap,
+    sliderHeight: settings.sliderHeight ?? defaultSettings.sliderHeight,
+    slidesToShow: settings.slidesToShow ?? defaultSettings.slidesToShow,
+    activeStyle: settings.activeStyle ?? defaultSettings.activeStyle,
+  };
   const getItemClass = (index: number) => {
     let className = "";
     switch (index) {
@@ -28,49 +60,50 @@ export default function Some({ children }: { children: ReactNode[] }) {
     children.length,
   ]);
 
-  const next = useCallback(
-    debounce(() => {
-      setOrder((prevOrder) => {
-        const newOrder = [...prevOrder]; // Create a copy of the previous state
-        const firstItem = newOrder.shift(); // Remove the first item
-        newOrder.push(firstItem!); // Add the removed item to the end
-        return newOrder; // Return the new array
-      });
-    }, 500),
+  const debouncedSetOrder = useCallback(
+    debounce((updateFunc: (prevOrder: number[]) => number[]) => {
+      setOrder(updateFunc);
+    }, 1000),
     []
   );
 
-  const prev = useCallback(
-    debounce(() => {
-      setOrder((prevOrder) => {
-        const newOrder = [...prevOrder]; // Create a copy of the previous state
-        const lastItem = newOrder.pop(); // Remove the last item
-        newOrder.unshift(lastItem!); // Add the removed item to the beginning
-        return newOrder; // Return the new array
-      });
-    }, 500),
-    []
-  );
+  const next = useCallback(() => {
+    debouncedSetOrder((prevOrder) => {
+      const newOrder = [...prevOrder];
+      const firstItem = newOrder.shift();
+      newOrder.push(firstItem!);
+      return newOrder;
+    });
+  }, [debouncedSetOrder]);
+
+  const prev = useCallback(() => {
+    debouncedSetOrder((prevOrder) => {
+      const newOrder = [...prevOrder];
+      const lastItem = newOrder.pop();
+      newOrder.unshift(lastItem!);
+      return newOrder;
+    });
+  }, [debouncedSetOrder]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      next();
-    }, 3000);
+    let interval: any;
+    if (autoplay)
+      interval = setInterval(() => {
+        next();
+      }, 3000);
     return () => {
-      clearInterval(interval);
+      if (interval) clearInterval(interval);
     };
-  }, []);
-  const centered = true;
-  const sliderHeight = 756;
-  const slidesToShow = 2;
-  const gap = 10 * (Math.ceil(slidesToShow) - 1);
+  }, [settings]);
+
+  const gap = baseGap * (Math.ceil(slidesToShow) - 1);
   const slideHeight = sliderHeight / slidesToShow - gap;
   const centerOffset = centered
     ? sliderHeight / 2 - sliderHeight / slidesToShow - slideHeight / 2
     : 0;
   return (
     <div
-      className="vv-flex vv-w-full vv-gap-6 vv-justify-center vv-overflow-hidden"
+      className="vv-flex vv-w-full vv-justify-center vv-overflow-hidden"
       style={{ height: sliderHeight }}
     >
       <div
@@ -86,8 +119,8 @@ export default function Some({ children }: { children: ReactNode[] }) {
               top: ((index - 1) * sliderHeight) / slidesToShow + centerOffset,
               transform:
                 orderK === initialOrder[2]
-                  ? "scale(1) translateX(-50%)"
-                  : "scale(0.8) translateX(-50%)",
+                  ? `${activeStyle === "scale"?"scale(1)":""} translateX(-50%)`
+                  : `${activeStyle === "scale"?"scale(0.8)":""} translateX(-50%)`,
               transformOrigin: "0% 50%",
             }}
           >
