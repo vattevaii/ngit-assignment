@@ -20,7 +20,7 @@ export default function Slider({
   children: ReactNode[];
   settings?: Partial<typeof defaultSettings>;
 }) {
-  const getSwipeDirection = useSwipe();
+  const { getSwipeDirection, swipeRef } = useSwipe();
   const {
     autoplay,
     centered,
@@ -105,7 +105,7 @@ export default function Slider({
     } else if (direction === "down") {
       prev();
     }
-  }, [getSwipeDirection, next, prev]);
+  }, [getSwipeDirection]);
 
   const gap = baseGap * (Math.ceil(slidesToShow) - 1);
   const slideHeight = sliderHeight / slidesToShow - gap;
@@ -115,7 +115,8 @@ export default function Slider({
   return (
     <div
       className="vv-flex vv-w-full vv-justify-center vv-overflow-hidden"
-      style={{ height: sliderHeight }}
+      style={{ height: sliderHeight + "px" }}
+      ref={swipeRef}
     >
       <div
         className="vv-relative vv-w-full vv-translate-x-1/2"
