@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { Slider, SliderSettings } from "../lib/main";
 import "./App.css";
 import { Card } from "./components/Card";
 import GradientDiv from "./components/common/GradientDiv";
@@ -48,10 +50,146 @@ function Test() {
   );
 }
 
-function App() {
+function SliderSettingsOptions({
+  handleSettingChange,
+  settings,
+}: {
+  settings: SliderSettings;
+  handleSettingChange: (name: string, value: any) => void;
+}) {
   return (
-    <div className="flex flex-col gap-5 bg-gradient-to-br from-[#fbcb73] via-[#d42b7d] to-[#7341bb] justify-center items-center text-red-950 p-5 bg-slate-400 h-screen">
-      <Card />
+    <div className="max-w-lg mx-auto p-3 bg-red-300">
+      <h2 className="text-lg font-semibold mb-4">Slider Settings</h2>
+      <div className="space-y-2">
+        <label className="flex items-center">
+          <input
+            type="checkbox"
+            checked={settings.autoplay}
+            onChange={(e) => handleSettingChange("autoplay", e.target.checked)}
+            className="mr-2"
+          />
+          Autoplay
+        </label>
+        <label className="flex items-center">
+          <input
+            type="checkbox"
+            checked={settings.centered}
+            onChange={(e) => handleSettingChange("centered", e.target.checked)}
+            className="mr-2"
+          />
+          Centered
+        </label>
+        <label className="flex flex-col">
+          <span className="px-2">Slider Height:</span>
+          <input
+            type="number"
+            value={settings.sliderHeight}
+            onChange={(e) =>
+              handleSettingChange("sliderHeight", parseInt(e.target.value))
+            }
+            className="ml-2 py-1 px-2 border border-gray-300 rounded"
+          />
+        </label>
+        <label className="flex flex-col">
+          <span className="px-2">Slides To Show:</span>
+          <input
+            type="number"
+            value={settings.slidesToShow}
+            onChange={(e) =>
+              handleSettingChange("slidesToShow", Number(e.target.value))
+            }
+            className="ml-2 py-1 px-2 border border-gray-300 rounded"
+          />
+        </label>
+        <label className="flex flex-col">
+          <span className="px-2">Gap:</span>
+          <input
+            type="number"
+            value={settings.gap}
+            onChange={(e) =>
+              handleSettingChange("gap", parseInt(e.target.value))
+            }
+            className="ml-2 py-1 px-2 border border-gray-300 rounded"
+          />
+        </label>
+        <label className="flex flex-col">
+          <span className="px-2">Active Style:</span>
+          <div>
+            <input
+              type="checkbox"
+              checked={settings.activeStyle === "scale"}
+              onChange={() => handleSettingChange("activeStyle", "scale")}
+              className="mr-2"
+            />
+            Scale
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              checked={settings.activeStyle === "none"}
+              onChange={() => handleSettingChange("activeStyle", "none")}
+              className="mr-2"
+            />
+            None
+          </div>
+        </label>
+      </div>
+      <div>
+        {/* Render your slider using the settings */}
+        {/* Example: */}
+        {/* <SliderComponent settings={settings}>{children}</SliderComponent> */}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [showSettings, setShowSettings] = useState(false);
+  const [settings, setSettings] = useState<SliderSettings>({
+    autoplay: false,
+    centered: true,
+    gap: 10,
+    sliderHeight: 700,
+    slidesToShow: 2,
+    activeStyle: "scale",
+  });
+
+  const handleSettingChange = (name: string, value: boolean | number) => {
+    setSettings((prevSettings) => ({
+      ...prevSettings,
+      [name]: value,
+    }));
+  };
+
+  return (
+    <div>
+      <div className="fixed top-0 left-0 z-10">
+        <button
+          className="m-2 p-1 bg-slate-600 rounded-md text-white"
+          onClick={() => setShowSettings((s) => !s)}
+        >
+          {showSettings ? "Hide" : "Show"} Settings
+        </button>
+        {showSettings ? (
+          <SliderSettingsOptions
+            settings={settings}
+            handleSettingChange={handleSettingChange}
+          />
+        ) : (
+          <></>
+        )}
+      </div>
+      <div className="flex flex-col gap-5 bg-fixed bg-gradient-to-br from-[#fbcb73] via-[#d42b7d] to-[#7341bb] justify-center items-center text-red-950 p-5 bg-slate-400 min-h-screen">
+        <Slider settings={settings}>
+          <Card id="1" />
+          <Card id="2" />
+          <Card id="3" />
+          <Card id="4" />
+          <Card id="5" />
+          <Card id="6" />
+          <Card id="7" />
+        </Slider>
+      </div>
     </div>
   );
 }
