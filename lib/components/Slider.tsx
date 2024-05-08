@@ -13,6 +13,37 @@ const defaultSettings = {
 
 export type SliderSettings = Partial<typeof defaultSettings>;
 
+const Slide = ({
+  active,
+  slideHeight,
+  top,
+  activeStyle = "scale",
+  child,
+}: {
+  active: boolean;
+  slideHeight: number;
+  top: number;
+  activeStyle: string;
+  child: ReactNode;
+}) => {
+  const transform = active
+    ? `${activeStyle === "scale" ? "scale(1)" : ""} translateX(-50%)`
+    : `${activeStyle === "scale" ? "scale(0.8)" : ""} translateX(-50%)`;
+  return (
+    <div
+      className={`vv-absolute vv-slide-wrap vv-transition-all vv-ease-in-out ${"vv-duration-500"}`}
+      style={{
+        height: slideHeight + "px",
+        top: top,
+        transform: transform,
+        transformOrigin: "0% 50%",
+      }}
+    >
+      {child}
+    </div>
+  );
+};
+
 export default function Slider({
   children,
   settings = { activeStyle: "scale" },
@@ -41,29 +72,27 @@ export default function Slider({
     ...Array.from(Array(children.length).keys()),
   ]);
 
-  const debouncedSetOrder = useCallback(
-    debounce((updateFunc: (prevOrder: number[]) => number[]) => {
-      setOrder(updateFunc);
-    }, 1000),
-    []
-  );
-
-  const next = useCallback(() => {
-    debouncedSetOrder((prevOrder) => {
+  const nextItem = () => {
+    console.log("nextItem");
+    setOrder((prevOrder) => {
       const newOrder = [...prevOrder];
       const firstItem = newOrder.shift();
       newOrder.push(firstItem!);
       return newOrder;
     });
-  }, [debouncedSetOrder]);
+  };
 
-  const prev = useCallback(() => {
-    debouncedSetOrder((prevOrder) => {
-      const lastItem = prevOrder[prevOrder.length - 1];
-      const newOrder = [lastItem, ...prevOrder.slice(0, prevOrder.length - 1)];
+  const prevItem = () => {
+    console.log("prevItem");
+    setOrder((prevOrder) => {
+      const newOrder = [...prevOrder];
+      const lastItem = newOrder.pop();
+      newOrder.unshift(lastItem!);
       return newOrder;
     });
-  }, [debouncedSetOrder]);
+  };
+  const next = debounce(nextItem, 1000);
+  const prev = debounce(prevItem, 1000);
 
   useEffect(() => {
     let interval: any;
@@ -74,7 +103,7 @@ export default function Slider({
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [settings]);
+  }, [autoplay]);
 
   useEffect(() => {
     const direction = getSwipeDirection();
@@ -91,61 +120,31 @@ export default function Slider({
     ? sliderHeight / 2 - sliderHeight / slidesToShow - slideHeight / 2
     : 0;
 
-  const Slide = useCallback(
-    ({
-      active,
-      slideHeight,
-      top,
-      child,
-    }: {
-      active: boolean;
-      slideHeight: number;
-      top: number;
-      child: ReactNode;
-    }) => {
-      const transform = active
-        ? `${activeStyle === "scale" ? "scale(1)" : ""} translateX(-50%)`
-        : `${activeStyle === "scale" ? "scale(0.8)" : ""} translateX(-50%)`;
-      return (
-        <div
-          className={`vv-absolute vv-slide-wrap vv-transition-all vv-ease-in-out ${"vv-duration-500"}`}
-          style={{
-            height: slideHeight + "px",
-            top: top,
-            transform: transform,
-            transformOrigin: "0% 50%",
-          }}
-        >
-          {child}
-        </div>
-      );
-    },
-    [activeStyle]
-  );
-
   return (
     <div
       className="vv-flex vv-w-full vv-justify-center vv-overflow-hidden"
       style={{ height: sliderHeight + "px" }}
       ref={swipeRef}
     >
-      <div
-        className="vv-relative vv-w-full vv-translate-x-1/2"
-        style={{ gap: gap + "px" }}
-      >
+      <div className="vv-relative vv-w-full vv-translate-x-1/2">
         {initialOrder.map((orderK, index) => (
           <Slide
+            activeStyle={activeStyle}
             active={orderK === initialOrder[2]}
             slideHeight={slideHeight}
             top={((index - 1) * sliderHeight) / slidesToShow + centerOffset}
             child={children[orderK]}
-            key={orderK}
+            key={orderK.toFixed(5)}
           />
         ))}
       </div>
       <div className="vv-flex vv-items-start vv-fixed vv-top-0 vv-right-0 vv-p-5 vv-gap-5">
-        <button onClick={prev}>Prev</button>
-        <button onClick={next}>Next</button>
+        <button className="p-2 vv-bg-red-800 vv-text-white" onClick={prev}>
+          Prev
+        </button>
+        <button className="p-2 vv-bg-red-800 vv-text-white" onClick={next}>
+          Next
+        </button>
       </div>
     </div>
   );

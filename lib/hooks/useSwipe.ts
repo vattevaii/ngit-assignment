@@ -57,7 +57,6 @@ export function useSwipe() {
   const getSwipeDirection = useCallback(() => {
     const deltaX = endX - startX;
     const deltaY = endY - startY;
-    console.log("DeltaY", deltaY);
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
       // Horizontal drag
       return deltaX > 0 ? "right" : "left";

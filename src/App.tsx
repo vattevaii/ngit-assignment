@@ -191,7 +191,7 @@ function App() {
           <Card id="7" />
         </Slider>
       </div>
-      <div className="flex flex-col gap-5 bg-fixed bg-gradient-to-br from-[#fbcb73] via-[#d42b7d] to-[#7341bb] justify-center items-center text-red-950 p-5 bg-slate-400 min-h-screen">
+      {/* <div className="flex flex-col gap-5 bg-fixed bg-gradient-to-br from-[#fbcb73] via-[#d42b7d] to-[#7341bb] justify-center items-center text-red-950 p-5 bg-slate-400 min-h-screen">
         <Slider settings={settings}>
           <span>1</span>
           <span>2</span>
@@ -201,7 +201,7 @@ function App() {
           <span>6</span>
           <span>7</span>
         </Slider>
-      </div>
+      </div> */}
     </div>
   );
 }
