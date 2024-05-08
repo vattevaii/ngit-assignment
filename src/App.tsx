@@ -163,7 +163,7 @@ function App() {
 
   return (
     <div>
-      <div className="fixed top-0 left-0">
+      <div className="fixed top-0 left-0 z-10">
         <button
           className="m-2 p-1 bg-slate-600 rounded-md text-white"
           onClick={() => setShowSettings((s) => !s)}

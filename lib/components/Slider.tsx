@@ -1,5 +1,6 @@
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { debounce } from "../helpers/debounce";
+import { useSwipe } from "../hooks/useSwipe";
 
 const defaultSettings = {
   autoplay: false,
@@ -19,6 +20,7 @@ export default function Slider({
   children: ReactNode[];
   settings?: Partial<typeof defaultSettings>;
 }) {
+  const getSwipeDirection = useSwipe();
   const {
     autoplay,
     centered,
@@ -96,6 +98,15 @@ export default function Slider({
     };
   }, [settings]);
 
+  useEffect(() => {
+    const direction = getSwipeDirection();
+    if (direction === "up") {
+      next();
+    } else if (direction === "down") {
+      prev();
+    }
+  }, [getSwipeDirection, next, prev]);
+
   const gap = baseGap * (Math.ceil(slidesToShow) - 1);
   const slideHeight = sliderHeight / slidesToShow - gap;
   const centerOffset = centered
@@ -119,8 +130,12 @@ export default function Slider({
               top: ((index - 1) * sliderHeight) / slidesToShow + centerOffset,
               transform:
                 orderK === initialOrder[2]
-                  ? `${activeStyle === "scale"?"scale(1)":""} translateX(-50%)`
-                  : `${activeStyle === "scale"?"scale(0.8)":""} translateX(-50%)`,
+                  ? `${
+                      activeStyle === "scale" ? "scale(1)" : ""
+                    } translateX(-50%)`
+                  : `${
+                      activeStyle === "scale" ? "scale(0.8)" : ""
+                    } translateX(-50%)`,
               transformOrigin: "0% 50%",
             }}
           >
