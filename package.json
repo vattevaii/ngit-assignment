@@ -5,10 +5,6 @@
   "type": "module",
   "main": "./dist-lib/index.js",
   "module": "./dist-lib/index.js",
-  "engines": {
-    "node": "18.18.2",
-    "npm": "9.8.1"
-  },
   "exports": {
     ".": {
       "import": "./dist/index.js",

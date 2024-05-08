@@ -5,6 +5,7 @@ import { Card } from "./components/Card";
 import GradientDiv from "./components/common/GradientDiv";
 
 // This is test component for every gradient I tried
+// @ts-ignore
 function Test() {
   return (
     <div className="flex flex-col gap-5 p-10 bg-accent-light">
