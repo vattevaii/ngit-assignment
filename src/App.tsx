@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Slider, SliderSettings } from "../lib/main";
+// import { Slider, SliderSettings } from "@vattevaii/small-swipe";
 import "./App.css";
 import { Card } from "./components/Card";
 import GradientDiv from "./components/common/GradientDiv";
@@ -190,6 +191,17 @@ function App() {
           <Card id="7" />
         </Slider>
       </div>
+      {/* <div className="flex flex-col gap-5 bg-fixed bg-gradient-to-br from-[#fbcb73] via-[#d42b7d] to-[#7341bb] justify-center items-center text-red-950 p-5 bg-slate-400 min-h-screen">
+        <Slider settings={settings}>
+          <span>1</span>
+          <span>2</span>
+          <span>3</span>
+          <span>4</span>
+          <span>5</span>
+          <span>6</span>
+          <span>7</span>
+        </Slider>
+      </div> */}
     </div>
   );
 }
