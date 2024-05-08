@@ -5,8 +5,9 @@ const commonOuterStyles =
 const commonShadow =
   "shadow-[#f1bbab60_5px_5px_5px_2px_inset,_#0002_-5px_-5px_6px_2px_inset]";
 const commonInnerStyles =
-  "absolute inset-0 bg-gradient-to-br from-[#f1bbab] to-[#0000] " +
+  "absolute inset-0 bg-gradient-to-br from-[#ed9478] to-[#ed947890] " +
   commonShadow;
+
 export function Card({ id }: { id?: string }) {
   return (
     <div className="p-5 h-full max-h-96 aspect-square rounded-3xl relative bg-gradient-to-br from-accent-solid  to-[#0001]">
