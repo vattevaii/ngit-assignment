@@ -58,7 +58,6 @@ export default function Slider({
   }, [debouncedSetOrder]);
 
   const prev = useCallback(() => {
-    return;
     debouncedSetOrder((prevOrder) => {
       const lastItem = prevOrder[prevOrder.length - 1];
       const newOrder = [lastItem, ...prevOrder.slice(0, prevOrder.length - 1)];
@@ -97,12 +96,12 @@ export default function Slider({
       active,
       slideHeight,
       top,
-      children,
+      child,
     }: {
+      active: boolean;
       slideHeight: number;
       top: number;
-      active: boolean;
-      children: ReactNode;
+      child: ReactNode;
     }) => {
       const transform = active
         ? `${activeStyle === "scale" ? "scale(1)" : ""} translateX(-50%)`
@@ -117,11 +116,11 @@ export default function Slider({
             transformOrigin: "0% 50%",
           }}
         >
-          {children}
+          {child}
         </div>
       );
     },
-    [children]
+    [activeStyle]
   );
 
   return (
@@ -139,14 +138,13 @@ export default function Slider({
             active={orderK === initialOrder[2]}
             slideHeight={slideHeight}
             top={((index - 1) * sliderHeight) / slidesToShow + centerOffset}
+            child={children[orderK]}
             key={orderK}
-          >
-            {children[orderK]}
-          </Slide>
+          />
         ))}
       </div>
       <div className="vv-flex vv-items-start vv-fixed vv-top-0 vv-right-0 vv-p-5 vv-gap-5">
-        {/* <button onClick={prev}>Prev</button> */}
+        <button onClick={prev}>Prev</button>
         <button onClick={next}>Next</button>
       </div>
     </div>

@@ -57,14 +57,16 @@ export function useSwipe() {
   const getSwipeDirection = useCallback(() => {
     const deltaX = endX - startX;
     const deltaY = endY - startY;
+    console.log("DeltaY", deltaY);
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
       // Horizontal drag
       return deltaX > 0 ? "right" : "left";
     } else {
+      if (Math.abs(deltaY) < 100) return "";
       // Vertical drag
       return deltaY > 0 ? "down" : "up";
     }
-  }, [startX, startY, endX, endY]);
+  }, [endX, endY]);
 
   return { swipeRef, getSwipeDirection };
 }
