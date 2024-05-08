@@ -1,6 +1,6 @@
 {
   "name": "@vattevaii/small-swipe",
-  "version": "0.0.1a",
+  "version": "0.0.1b",
   "type": "module",
   "main": "./dist-lib/index.js",
   "module": "./dist-lib/index.js",
