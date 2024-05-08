@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { debounce } from "../helpers/debounce";
 import { useSwipe } from "../hooks/useSwipe";
 
