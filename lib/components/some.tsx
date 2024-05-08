@@ -1,4 +1,5 @@
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { debounce } from "../helpers/debounce";
 
 export default function Some({ children }: { children: ReactNode[] }) {
   const getItemClass = (index: number) => {
@@ -27,23 +28,30 @@ export default function Some({ children }: { children: ReactNode[] }) {
     children.length,
   ]);
 
-  const next = () => {
-    setOrder((prevOrder) => {
-      const newOrder = [...prevOrder]; // Create a copy of the previous state
-      const firstItem = newOrder.shift(); // Remove the first item
-      newOrder.push(firstItem!); // Add the removed item to the end
-      return newOrder; // Return the new array
-    });
-  };
+  const next = useCallback(
+    debounce(() => {
+      setOrder((prevOrder) => {
+        const newOrder = [...prevOrder]; // Create a copy of the previous state
+        const firstItem = newOrder.shift(); // Remove the first item
+        newOrder.push(firstItem!); // Add the removed item to the end
+        return newOrder; // Return the new array
+      });
+    }, 500),
+    []
+  );
 
-  const prev = () => {
-    setOrder((prevOrder) => {
-      const newOrder = [...prevOrder]; // Create a copy of the previous state
-      const lastItem = newOrder.pop(); // Remove the last item
-      newOrder.unshift(lastItem!); // Add the removed item to the beginning
-      return newOrder; // Return the new array
-    });
-  };
+  const prev = useCallback(
+    debounce(() => {
+      setOrder((prevOrder) => {
+        const newOrder = [...prevOrder]; // Create a copy of the previous state
+        const lastItem = newOrder.pop(); // Remove the last item
+        newOrder.unshift(lastItem!); // Add the removed item to the beginning
+        return newOrder; // Return the new array
+      });
+    }, 500),
+    []
+  );
+
   useEffect(() => {
     const interval = setInterval(() => {
       next();
@@ -54,7 +62,7 @@ export default function Some({ children }: { children: ReactNode[] }) {
   }, []);
   const centered = true;
   const sliderHeight = 756;
-  const slidesToShow = 2.4;
+  const slidesToShow = 2;
   const gap = 10 * (Math.ceil(slidesToShow) - 1);
   const slideHeight = sliderHeight / slidesToShow - gap;
   const centerOffset = centered
@@ -92,8 +100,6 @@ export default function Some({ children }: { children: ReactNode[] }) {
                   : orderK
               ]
             }
-            {orderK}
-            {index}
           </div>
         ))}
       </div>
