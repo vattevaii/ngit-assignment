@@ -1,19 +1,19 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import dts from "vite-plugin-dts";
 import { resolve } from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   if (mode === "lib")
     return {
-      plugins: [react(), dts({ include: ["lib"] })],
+      plugins: [react()],
       build: {
         outDir: "dist-lib",
         emptyOutDir: true,
         rollupOptions: {
           external: ["react", "react-dom", "react/jsx-runtime"],
           output: {
+            assetFileNames: "index[extname]",
             globals: {
               react: "react",
               "react-dom": "ReactDOM",
