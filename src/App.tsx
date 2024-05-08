@@ -118,7 +118,7 @@ function SliderSettingsOptions({
             <input
               type="checkbox"
               checked={settings.activeStyle === "scale"}
-              onChange={(e) => handleSettingChange("activeStyle", "scale")}
+              onChange={() => handleSettingChange("activeStyle", "scale")}
               className="mr-2"
             />
             Scale
@@ -127,7 +127,7 @@ function SliderSettingsOptions({
             <input
               type="checkbox"
               checked={settings.activeStyle === "none"}
-              onChange={(e) => handleSettingChange("activeStyle", "none")}
+              onChange={() => handleSettingChange("activeStyle", "none")}
               className="mr-2"
             />
             None
