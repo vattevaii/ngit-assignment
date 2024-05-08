@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { debounce } from "../helpers/debounce";
 import { useSwipe } from "../hooks/useSwipe";
 
@@ -36,26 +36,7 @@ export default function Slider({
     slidesToShow: settings.slidesToShow ?? defaultSettings.slidesToShow,
     activeStyle: settings.activeStyle ?? defaultSettings.activeStyle,
   };
-  const getItemClass = (index: number) => {
-    let className = "";
-    switch (index) {
-      case 0:
-        className = "vv-first";
-        break;
-      case children.length - 1:
-        className = "vv-last";
-        break;
-    }
-    className += " vv-slide h-full";
-    return className;
-  };
-  const items = useMemo(
-    () =>
-      children.map((child, i) => (
-        <div className={getItemClass(i)}>{child}</div>
-      )),
-    [children]
-  );
+
   const [initialOrder, setOrder] = useState([
     ...Array.from(Array(children.length).keys()),
   ]);
