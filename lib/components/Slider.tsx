@@ -17,6 +17,7 @@ const Slide = ({
   active,
   slideHeight,
   top,
+  firstOrLast,
   activeStyle = "scale",
   child,
 }: {
@@ -24,6 +25,7 @@ const Slide = ({
   slideHeight: number;
   top: number;
   activeStyle: string;
+  firstOrLast: boolean;
   child: ReactNode;
 }) => {
   const transform = active
@@ -37,7 +39,7 @@ const Slide = ({
         top: top,
         transform: transform,
         transformOrigin: "0% 50%",
-        opacity: active? "1":"0.5"
+        opacity: firstOrLast ? "0" : active ? "1" : "0.5",
       }}
     >
       {child}
@@ -128,7 +130,24 @@ export default function Slider({
       ref={swipeRef}
     >
       <div className="vv-relative vv-w-full vv-translate-x-1/2">
-        {initialOrder.map((orderK, index) => (
+        {children.map((child, i) => (
+          <Slide
+            activeStyle={activeStyle}
+            active={i === initialOrder[2]}
+            slideHeight={slideHeight}
+            top={
+              ((initialOrder.indexOf(i) - 1) * sliderHeight) / slidesToShow +
+              centerOffset
+            }
+            firstOrLast={
+              i === initialOrder[0] ||
+              i === initialOrder[initialOrder.length - 1]
+            }
+            child={child}
+            key={i}
+          />
+        ))}
+        {/* {initialOrder.map((orderK, index) => (
           <Slide
             activeStyle={activeStyle}
             active={orderK === initialOrder[2]}
@@ -137,7 +156,7 @@ export default function Slider({
             child={children[orderK]}
             key={orderK.toFixed(5)}
           />
-        ))}
+        ))} */}
       </div>
       <div className="vv-flex vv-items-start vv-fixed vv-top-0 vv-right-0 vv-p-5 vv-gap-5">
         <button className="p-2 vv-bg-red-800 vv-text-white" onClick={prev}>
